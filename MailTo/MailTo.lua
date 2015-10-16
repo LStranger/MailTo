@@ -1,3 +1,11 @@
+--[[ MailTo Again: Mailbox management system,
+    Written by LStranger (Copyright (C) 2015)
+
+    version history:
+    1.8.0	Dropped OpenBackpack() supression, original functionality is good since 5.0 patch.
+        	Updated TOC to WoW 6.2.
+--]]
+
 --[[ MailTo Next: Mailbox management system,
     Written by Jyin of Silverhand, (copyright (c) 2005-2007)
     
@@ -275,7 +283,7 @@ function MailTo_Init()
     SlashCmdList["INBOX"] = MailTo_inbox_command
     SLASH_INBOX1 = "/inbox"
     Player = UnitName("player")
-    Server = GetCVar("realmName")
+    Server = GetRealmName()
     Faction, _ = UnitFactionGroup("player")
 --    if MailTo_Inbox[Server] then
 --      if not MailTo_Inbox[Server][Player] and not MailTo_InList(Player) then
@@ -331,8 +339,8 @@ function MailTo_Init()
     MailTo_MailMod_Save = MailFrameTab_OnClick
     MailFrameTab_OnClick = MailTo_MailMod
     -- hook OpenBackpack
-    MailTo_OpenBackpack_Save = OpenBackpack
-    OpenBackpack = MailTo_OpenBackpack
+    -- MailTo_OpenBackpack_Save = OpenBackpack
+    -- OpenBackpack = MailTo_OpenBackpack
     -- Window position of MailTo button
     if GetLocale()=="frFR" or GetLocale()=='deDE' or MailTo_Option.pos then
       local pos = MailTo_Option.pos and MailTo_Option.pos or -12
@@ -1638,9 +1646,9 @@ end
 
 --
 
-function MailTo_OpenBackpack()
+--[[ function MailTo_OpenBackpack()
 	-- DEFAULT_CHAT_FRAME:AddMessage("Mailable_OpenFrame = "..Mailable_OpenFrame)
 	if not MailFrame:IsShown() or Mailable_OpenFrame ~= "" or MailTo_Option.noclick then
 		MailTo_OpenBackpack_Save()
 	end
-end
+end --]]
