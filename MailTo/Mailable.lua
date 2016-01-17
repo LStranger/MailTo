@@ -185,6 +185,14 @@ function Mailable_Finditems( frame, trade )
 							skipThisItem = true 
 							-- DEFAULT_CHAT_FRAME:AddMessage("is conjured")
 						end
+					elseif line == 1 then
+						-- battle pets have own tooltip frame
+						-- therefore test for them explicitly
+						local _texture, _count, _locked, _quality, _readable, _lootable, link, _isFiltered = GetContainerItemInfo(container, slot)
+						if link and link:find("\124Hbattlepet:") then
+							-- DEFAULT_CHAT_FRAME:AddMessage("is battle pet")
+							itemExist = true
+						end
 					end
 				end
 			end
