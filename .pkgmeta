@@ -1,0 +1,7 @@
+package-as: MailTo
+
+manual-changelog: ChangeLog.txt
+
+move-folders:
+    MailTo/CmdHelp: CmdHelp
+    MailTo/MailTo: MailTo

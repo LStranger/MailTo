@@ -1,0 +1,8 @@
+Release v.1.8.1:
+    - Fixed check on BoE recipes that produce BoP items, those were wrongly considered as BoP.
+    - Added a check for Battle Pets since those don't have GameTooltip.
+
+Release v.1.8.0:
+    - Initial import for MailTo Next version 1.7.0.
+    - Dropped OpenBackpack() supression, original functionality is good since 5.0 patch.
+    - Updated TOC to WoW 6.2.
