@@ -176,16 +176,12 @@ function Mailable_Finditems( frame, trade )
 						if theLineTxt == ITEM_SOULBOUND then 
 							skipThisItem = true 
 							-- DEFAULT_CHAT_FRAME:AddMessage("is soulbound")
-						end
-						if theLineTxt == ITEM_BIND_QUEST then 
+						elseif theLineTxt == ITEM_BIND_QUEST then 
 							skipThisItem = true 
 							-- DEFAULT_CHAT_FRAME:AddMessage("is quest item")
-						end
-						if theLineTxt == ITEM_BIND_ON_PICKUP then 
-							skipThisItem = true 
-							-- DEFAULT_CHAT_FRAME:AddMessage("is bind on pickup")
-						end
-						if theLineTxt == ITEM_CONJURED and not trade then 
+						-- any BoP in bag cannot be not soulbound already
+						-- therefore we don't check for ITEM_BIND_ON_PICKUP here
+						elseif theLineTxt == ITEM_CONJURED and not trade then 
 							skipThisItem = true 
 							-- DEFAULT_CHAT_FRAME:AddMessage("is conjured")
 						end
