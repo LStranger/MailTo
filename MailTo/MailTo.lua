@@ -788,7 +788,7 @@ end
 -- Handle clicks on the Send button
 function MailTo_SendMail()
 		MailTo_SavedName = SendMailNameEditBox:GetText()
-		local name,tex,nr = GetSendMailItem()
+		local name,tex,nr = GetSendMailItem(1)
 		local copper = MoneyInputFrame_GetCopper(SendMailMoney)
 		if name then
 		-- Item take time to reach non-alts
