@@ -605,7 +605,7 @@ function MailTo_InboxItem_OnClick(self, button, down)
 			end
 		end
 		if item and not skip then
-			local itemIndex
+			local itemIndex = 0
 			if single then 
 				item,hi,dl = GetInboxItem(ix, itemIndex)
 				mailto_print(format(MAILTO_RECEIVED,item,from,sub))

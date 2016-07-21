@@ -1,3 +1,6 @@
+Release v.1.8.3:
+    - Fixed right-click on mailbox item, it generates an error with 7.0.
+
 Release v.1.8.2:
     - Fixed call to GetSendMailItem() which lead to mail send failure.
     - Updated TOC to WoW 7.0.
