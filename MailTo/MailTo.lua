@@ -654,7 +654,7 @@ function MailTo_ReturnInboxItem(itemID)
     local item,icon,from,sub,money = GetInboxHeaderInfo(itemID)
 	if MailTo_Mail[Server][from] then
 	  local nr,_
-	  if item then _,icon,nr = GetInboxItem(itemID) end
+	  if item then _,icon,nr = GetInboxItem(itemID, 1) end
 	  local exp = time() + MAIL_EXP
 	  local mail = {tex=icon; name=sub; from=Player; mon=money; exp=exp; nr=nr; new=1}
 	  tinsert(MailTo_Mail[Server][from],1,mail)
@@ -1520,7 +1520,7 @@ function MailTo_OnUpdate(self, elapsed)
     MailTo_Time = MailTo_Time-elapsed
     if MailTo_Time>0 then return end
     if MailTo_CheckLog(nil,MailTo_Option.alert) and not MailTo_Option.noding then
-      PlaySound("AuctionWindowOpen")
+      PlaySound(5274)
     end
     local log = MailTo_Log[1]
     if log then

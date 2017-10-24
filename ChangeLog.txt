@@ -1,3 +1,8 @@
+Release v.1.8.4:
+    - Fixed function to return mail due to GetInboxItem() API change.
+    - Fixed call to PlaySound("AuctionWindowOpen"), API changed in 7.3.
+    - Update TOC to WoW 7.3.
+
 Release v.1.8.3:
     - Fixed right-click on mailbox item, it generates an error with 7.0.
 
