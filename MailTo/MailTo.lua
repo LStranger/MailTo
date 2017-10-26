@@ -535,9 +535,8 @@ function MailTo_InboxItem(self)
 	end
 	
 	if packageIcon then
-		--local nm,tx,nr = GetInboxItem(this.index)
       	for j = 1, ATTACHMENTS_MAX_RECEIVE do
-        	local name, itemTexture, count, quality, canUse = GetInboxItem(self.index, j)
+        	local name, ID, itemTexture, count, quality, canUse = GetInboxItem(self.index, j)
         	if name then
 	        	--mailto_print( name )
 				if count > 1 then 
@@ -607,13 +606,13 @@ function MailTo_InboxItem_OnClick(self, button, down)
 		if item and not skip then
 			local itemIndex = 0
 			if single then 
-				item,hi,dl = GetInboxItem(ix, itemIndex)
+				item = GetInboxItem(ix, itemIndex)
 				mailto_print(format(MAILTO_RECEIVED,item,from,sub))
 				TakeInboxItem(ix, itemIndex)
 				skip = true
 			else
 				for itemIndex = ATTACHMENTS_MAX_RECEIVE, 1, -1 do
-					item,hi,dl = GetInboxItem(ix, itemIndex)
+					item = GetInboxItem(ix, itemIndex)
 					if item then
 						mailto_print(format(MAILTO_RECEIVED,item,from,sub))
 					end
@@ -654,7 +653,7 @@ function MailTo_ReturnInboxItem(itemID)
     local item,icon,from,sub,money = GetInboxHeaderInfo(itemID)
 	if MailTo_Mail[Server][from] then
 	  local nr,_
-	  if item then _,icon,nr = GetInboxItem(itemID, 1) end
+	  if item then _,_,icon,nr = GetInboxItem(itemID, 1) end
 	  local exp = time() + MAIL_EXP
 	  local mail = {tex=icon; name=sub; from=Player; mon=money; exp=exp; nr=nr; new=1}
 	  tinsert(MailTo_Mail[Server][from],1,mail)
@@ -788,7 +787,7 @@ end
 -- Handle clicks on the Send button
 function MailTo_SendMail()
 		MailTo_SavedName = SendMailNameEditBox:GetText()
-		local name,tex,nr = GetSendMailItem(1)
+		local name,id,tex,nr,qlty = GetSendMailItem(1)
 		local copper = MoneyInputFrame_GetCopper(SendMailMoney)
 		if name then
 		-- Item take time to reach non-alts
@@ -941,7 +940,7 @@ function MailTo_UpdateInboxRecord()
 			mail[i] = {tex=pi; name=sub; from=sndr; mon=mon; exp=exp; del=del}
 		
 			for j = 1, ATTACHMENTS_MAX_RECEIVE do
-				local nm,tx,nr,qlty = GetInboxItem(i, j)
+				local nm,id,tx,nr,qlty,canUse = GetInboxItem(i, j)
 				local ilink = GetInboxItemLink(i, j);
 				if nm then
 					-- mailto_print( nm.." "..qlty )

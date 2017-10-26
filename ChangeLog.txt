@@ -1,3 +1,6 @@
+Release v.1.8.5:
+    - Fixed calls to GetSendMailItem() and GetInboxItem(), API was changed.
+
 Release v.1.8.4:
     - Fixed function to return mail due to GetInboxItem() API change.
     - Fixed call to PlaySound("AuctionWindowOpen"), API changed in 7.3.
