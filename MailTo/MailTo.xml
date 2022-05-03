@@ -324,7 +324,7 @@
 
 
 <!-- Mailable -->
-	<ItemButton name="MailTo_MailableButtonTemplate" virtual="true">
+	<ItemButton name="MailTo_MailableButtonTemplate" mixin="ContainerFrameItemButtonMixin" virtual="true">
 		<Size> <AbsDimension x="25" y="25"/> </Size>
 		<Anchors> <Anchor point="TOPLEFT"/> </Anchors>
 		<Layers>

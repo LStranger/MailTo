@@ -1,3 +1,9 @@
+Release v.1.8.8:
+    - Fixed issue with container buttons.
+    - Fixed log when Multiple Buyers or Multiple Sellers were involved.
+    - Implemented broken since 8.1 the put to auction by right click function.
+    - Updated TOC to WoW 9.2.0.
+
 Release v.1.8.7:
     - Fixed usage on deprecated ItemButtonTemplate.
     - Updated TOC to WoW 9.1.5.

@@ -524,9 +524,9 @@ function MailTo_InboxItem(self)
 		--local iType,item,name,bid,bo,dep,cut = GetInboxInvoiceInfo(this.index)
 		local invoiceType, itemName, playerName, bid, buyout, deposit, consignment = GetInboxInvoiceInfo(self.index)
 		if invoiceType=='seller' then
-			GameTooltip:AddLine(format(MAILTO_SALE,playerName,itemName,gsc(bid),gsc(bid-consignment)),1,1,1)
+			GameTooltip:AddLine(format(MAILTO_SALE,playerName or AUCTION_HOUSE_MAIL_MULTIPLE_BUYERS,itemName,gsc(bid),gsc(bid-consignment)),1,1,1)
 		elseif invoiceType=='buyer' then
-			GameTooltip:AddLine(format(MAILTO_WON,itemName,playerName,gsc(bid)),1,1,1)
+			GameTooltip:AddLine(format(MAILTO_WON,itemName,playerName or AUCTION_HOUSE_MAIL_MULTIPLE_SELLERS,gsc(bid)),1,1,1)
 		end
 	elseif item then 
 		GameTooltip:SetInboxItem(self.index)
@@ -592,7 +592,7 @@ function MailTo_InboxItem_OnClick(self, button, down)
 			Count_Cash(from,sub,money)
 			local iType,item,name,bid,bo,dep,cut = GetInboxInvoiceInfo(ix)
 			if iType=='seller' then
-				mailto_print(format(MAILTO_SALE,name,item,gsc(bid),gsc(bid-cut)))
+				mailto_print(format(MAILTO_SALE,name or AUCTION_HOUSE_MAIL_MULTIPLE_BUYERS,item,gsc(bid),gsc(bid-cut)))
 			end
 			TakeInboxMoney(ix)
 			if single then skip = true end
@@ -600,7 +600,7 @@ function MailTo_InboxItem_OnClick(self, button, down)
 			GetInboxText(ix) -- force read to access invoice
 			local iType,item,name,bid,bo = GetInboxInvoiceInfo(ix)
 			if iType=='buyer' then
-				mailto_print(format(MAILTO_WON,item,name,gsc(bid)))
+				mailto_print(format(MAILTO_WON,item,name or AUCTION_HOUSE_MAIL_MULTIPLE_SELLERS,gsc(bid)))
 			end
 		end
 		if item and not skip then
