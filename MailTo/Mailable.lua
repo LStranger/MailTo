@@ -492,9 +492,17 @@ function Mailable_OnClick(b, click, down)
 					end
 				elseif Mailable_OpenFrame == "Auction" then
 					if click == "RightButton" and not MailTo_Option.noshift then
-						AuctionHouseFrame.SellTab:OnClick()
-						PickupContainerItem(container,slot)
-						AuctionHouseFrame.ItemSellFrame:OnOverlayClick()
+						if AuctionatorTabs_Selling ~= nil then
+							-- support for Auctionator addon
+							AuctionatorTabs_Selling:OnClick()
+							PickupContainerItem(container,slot)
+							AuctionHouseFrame.AuctionatorSellingFrame.SaleItemFrame.Icon:OnReceiveDrag()
+						else
+							-- use standard Sell tab
+							AuctionHouseFrame.SellTab:OnClick()
+							PickupContainerItem(container,slot)
+							AuctionHouseFrame.ItemSellFrame:OnOverlayClick()
+						end
 					else
 						AuctionHouseFrame.BuyTab:OnClick()
 						AuctionSearch(GetContainerItemLink(container, slot))

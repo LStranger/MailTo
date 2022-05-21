@@ -667,51 +667,50 @@ end
 -- Handle auction browse searching
 function AuctionSearch(link)
     if MailTo_Option.noauction then return end
-    if not AuctionFrameBrowse or not AuctionFrameBrowse:IsVisible() then return end
+    if not AuctionHouseFrame.SearchBar or not AuctionHouseFrame.SearchBar:IsVisible() then return end
     if link and not strfind(link,"item:") then return end
-    BrowseMinLevel:SetText('')
-    BrowseMaxLevel:SetText('')
-    UIDropDownMenu_SetText(BrowseDropDown, '')
-    UIDropDownMenu_SetSelectedName(BrowseDropDown)
+    AuctionHouseFrame.SearchBar.FilterButton:Reset()
     local name,ilk,ir,il,iml,class,sub
     if link then
       local i,j,name = strfind(link,"%[(.+)%]")
-      BrowseName:SetText(name)
-      BrowseName:HighlightText(0,-1)
-      IsUsableCheckButton:SetChecked(false)
-      if MailTo_Option.noshift or not IsShiftKeyDown() then return 1 end
-      local i,j,item = strfind(link,"(item:%d+:%d+:%d+:%d+)")
-      name,ilk,ir,il,iml,class,sub = GetItemInfo(item)
+      AuctionHouseFrame.SearchBar:SetSearchText(name)
+      --IsUsableCheckButton:SetChecked(false)
+      if MailTo_Option.noshift or IsShiftKeyDown() then return 1 end
+      --AuctionHouseFrame.SearchBar.FilterButton.LevelRangeFrame.MinRange:SetText()
+      --AuctionHouseFrame.SearchBar.FilterButton.LevelRangeFrame.MaxRange:SetText()
+--      local i,j,item = strfind(link,"(item:%d+:%d+:%d+:%d+)")
+--      name,ilk,ir,il,iml,class,sub = GetItemInfo(item)
     else
-      BrowseName:SetText('')
-      IsUsableCheckButton:SetChecked(true)
-      if MailTo_Option.noshift or not IsShiftKeyDown() then return 1 end
-      class = 'Recipe'; sub = class
+      AuctionHouseFrame:SetSearchText('')
+      --IsUsableCheckButton:SetChecked(true)
+      if MailTo_Option.noshift or IsShiftKeyDown() then return 1 end
+      --class = 'Recipe'; sub = class
     end
-    AuctionFrameBrowse.selectedClass = class
-    for ix,name in pairs(CLASS_FILTERS) do
-      if name==class then
-        AuctionFrameBrowse.selectedClassIndex = ix
-        i = ix
-        break
-      end
-    end
-    if class~=sub then
-      AuctionFrameBrowse.selectedSubclass = HIGHLIGHT_FONT_COLOR_CODE..sub..FONT_COLOR_CODE_CLOSE
-      for ix,name in pairs({GetAuctionItemSubClasses(i)}) do
-        if name==sub then
-          AuctionFrameBrowse.selectedSubclassIndex = ix
-          break
-        end
-      end
-    else
-      AuctionFrameBrowse.selectedSubclass = nil
-      AuctionFrameBrowse.selectedSubclassIndex = nil
-    end
-    AuctionFrameBrowse.selectedInvtype = nil
-    AuctionFrameBrowse.selectedInvtypeIndex = nil
-    AuctionFrameFilters_Update()
-    BrowseSearchButton:Click()
+    -- TODO: AuctionHouseCategoriesList
+--    AuctionFrameBrowse.selectedClass = class
+--    for ix,name in pairs(CLASS_FILTERS) do
+--      if name==class then
+--        AuctionFrameBrowse.selectedClassIndex = ix
+--        i = ix
+--        break
+--      end
+--    end
+--    if class~=sub then
+--      AuctionFrameBrowse.selectedSubclass = HIGHLIGHT_FONT_COLOR_CODE..sub..FONT_COLOR_CODE_CLOSE
+--      for ix,name in pairs({GetAuctionItemSubClasses(i)}) do
+--        if name==sub then
+--          AuctionFrameBrowse.selectedSubclassIndex = ix
+--          break
+--        end
+--      end
+--    else
+--      AuctionFrameBrowse.selectedSubclass = nil
+--      AuctionFrameBrowse.selectedSubclassIndex = nil
+--    end
+--    AuctionFrameBrowse.selectedInvtype = nil
+--    AuctionFrameBrowse.selectedInvtypeIndex = nil
+--    AuctionFrameFilters_Update()
+    AuctionHouseFrame.SearchBar:StartSearch()
     return 1
 end
 

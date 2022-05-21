@@ -1,3 +1,7 @@
+Release v.1.8.9:
+    - Added support for Auctionator: put item by Right-click tab into 'Selling' tab if available.
+    - Fixed Left-click for the AH to search for the item.
+
 Release v.1.8.8:
     - Fixed issue with container buttons.
     - Fixed log when Multiple Buyers or Multiple Sellers were involved.
