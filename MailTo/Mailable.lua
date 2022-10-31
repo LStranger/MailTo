@@ -112,7 +112,9 @@ function Mailable_Finditems( frame, trade )
 				b:Disable()
 				b:Hide()
 			else
-				b:SetNormalTexture( nil )
+				-- using nil for texture does not work anymore
+				--local tex = b:CreateTexture(nil, nil, "UIPanelButtonUpTexture")
+				--b:SetNormalTexture(tex)
 				SetItemButtonTexture(b, nil)
 				SetItemButtonDesaturated(b, false)
 	

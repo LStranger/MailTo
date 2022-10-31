@@ -1,4 +1,4 @@
-Release v.1.8.10:
+Release v.1.8.11:
     - Fixed issues with new WoW API.
     - Updated TOC to WoW 10.0.0.
 
