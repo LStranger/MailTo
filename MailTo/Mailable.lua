@@ -28,7 +28,7 @@ local function mailto_print(msg)
 end
    
 -- Event handler
-function Mailable_Event(frame, event, ...)
+function Mailable_Event(frame, event, arg)
 	if event=="MAIL_SHOW" and not MailTo_Option.noclick then
 		--CheckInbox()
 		Mailable_OpenFrame = "Mail"
@@ -41,59 +41,40 @@ function Mailable_Event(frame, event, ...)
 		--if GetInboxNumItems() == 0 then
 		--	MailFrameTab2:Click()
 		--end
-		return
-	end
-	if event=="TRADE_SHOW" and not MailTo_Option.notrade then
+	elseif event=="TRADE_SHOW" and not MailTo_Option.notrade then
 		Mailable_OpenFrame = "Trade"
 		Mailable_CurrentPage = 1
 		Mailable_Finditems( "MailTo_TradableFrame", true )
 		frame:RegisterEvent("BAG_UPDATE")
 		Mailable_UpdateHint("MailTo_TradableFrame")
 		ShowUIPanel(MailTo_TradableFrame)
-		return
-	end
-	if event=="AUCTION_HOUSE_SHOW" and not MailTo_Option.noauction then
+	elseif event=="AUCTION_HOUSE_SHOW" and not MailTo_Option.noauction then
 		Mailable_OpenFrame = "Auction"
 		Mailable_CurrentPage = 1
 		Mailable_Finditems( "MailTo_AuctionableFrame", false )
 		frame:RegisterEvent("BAG_UPDATE")
 		Mailable_UpdateHint("MailTo_AuctionableFrame")
 		ShowUIPanel(MailTo_AuctionableFrame)
-		return
-	end
-	
 	-- we will do update/close events even if option is disabled, just in case it was disabled while it was open
-	if event=="BAG_UPDATE" then
+	elseif event=="BAG_UPDATE" then
 		--DEFAULT_CHAT_FRAME:AddMessage("BAG_UPDATE")
 		Mailable_Update(frame)
-		return
-	end
-	
-	if event=="MAIL_CLOSED" then
+	elseif event=="MAIL_CLOSED" or (event=="PLAYER_INTERACTION_MANAGER_FRAME_HIDE" and arg==17) then
 		Mailable_OpenFrame = ""
 		Mailable_CurrentPage = 0
 		frame:UnregisterEvent("BAG_UPDATE")
 		HideUIPanel(MailTo_MailableFrame)
-		return
-	end
-	
-	if event=="TRADE_CLOSED" then
+	elseif event=="TRADE_CLOSED" then
 		Mailable_OpenFrame = ""
 		Mailable_CurrentPage = 0
 		frame:UnregisterEvent("BAG_UPDATE")
 		HideUIPanel(MailTo_TradableFrame)
-		return
-	end
-
-	if event=="AUCTION_HOUSE_CLOSED" then
+	elseif event=="AUCTION_HOUSE_CLOSED" or (event=="PLAYER_INTERACTION_MANAGER_FRAME_HIDE" and arg==21) then
 		Mailable_OpenFrame = ""
 		Mailable_CurrentPage = 0
 		frame:UnregisterEvent("BAG_UPDATE")
 		HideUIPanel(MailTo_AuctionableFrame)
-		return
-	end
-
-	if event=="ITEM_LOCK_CHANGED" then
+	elseif event=="ITEM_LOCK_CHANGED" then
 		--DEFAULT_CHAT_FRAME:AddMessage("ITEM_LOCK_CHANGED")
 		if Mailable_OpenFrame == "Mail" then
 			Mailable_Finditems( "MailTo_MailableFrame", false )
@@ -102,9 +83,7 @@ function Mailable_Event(frame, event, ...)
 		elseif Mailable_OpenFrame == "Auction" then
 			Mailable_Finditems( "MailTo_AuctionableFrame", true )
 		end
-		return
 	end
-	
 end
 
 Max_Scan_line = 5

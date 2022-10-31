@@ -1,3 +1,7 @@
+Release v.1.8.10:
+    - Fixed issues with new WoW API.
+    - Updated TOC to WoW 10.0.0.
+
 Release v.1.8.9:
     - Added support for Auctionator: put item by Right-click tab into 'Selling' tab if available.
     - Fixed Left-click for the AH to search for the item.

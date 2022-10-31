@@ -237,7 +237,7 @@
 			</Layer>
 		  </Layers>
 		</Frame>
-		<CheckButton name="$parentServerButton" inherits="OptionsCheckButtonTemplate" hidden="True">
+		<CheckButton name="$parentServerButton" inherits="SettingsCheckBoxControlTemplate" hidden="True">
 		  <Anchors>
 			<Anchor point="CENTER" relativeTo="$parent_DropDown" relativePoint="TOPRIGHT">
 			  <Offset> <AbsDimension x="6" y="-14"/> </Offset>
@@ -576,6 +576,7 @@
 				self:RegisterEvent("AUCTION_HOUSE_SHOW")
 				self:RegisterEvent("AUCTION_HOUSE_CLOSED")
 				self:RegisterEvent("ITEM_LOCK_CHANGED")
+				self:RegisterEvent("PLAYER_INTERACTION_MANAGER_FRAME_HIDE")
 			</OnLoad>
 			<OnEvent>
 				Mailable_Event(self, event, ...);
