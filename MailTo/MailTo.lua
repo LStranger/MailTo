@@ -866,7 +866,7 @@ end
 function MailTo_Event(event)
 	if event=="BAG_UPDATE" then
 		if MailTo_Slot then
-			PickupContainerItem(0,MailTo_Slot)
+			C_Container.PickupContainerItem(0,MailTo_Slot)
 			ClickAuctionSellItemButton()
 			MailTo_Slot = nil
 		end

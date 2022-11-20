@@ -13,16 +13,6 @@ numButton = 0
 --
 Mailable_FilterList = {}
 
-CreateFrame( "GameTooltip", "MailTo_MailableHiddenTooltip" ); -- Tooltip name cannot be nil
-MailTo_MailableHiddenTooltip:SetOwner( WorldFrame, "ANCHOR_NONE" );
--- Allow tooltip SetX() methods to dynamically add new lines based on these
-MailTo_MailableHiddenTooltip:AddFontStrings(
-	MailTo_MailableHiddenTooltip:CreateFontString( "$parentTextLeft1", nil, "GameTooltipText" ),
-	MailTo_MailableHiddenTooltip:CreateFontString( "$parentTextRight1", nil, "GameTooltipText" ) );
-MailTo_MailableHiddenTooltip:AddFontStrings(
-	MailTo_MailableHiddenTooltip:CreateFontString( "$parentTextLeft2", nil, "GameTooltipText" ),
-	MailTo_MailableHiddenTooltip:CreateFontString( "$parentTextRight2", nil, "GameTooltipText" ) );
-
 local function mailto_print(msg)
     SELECTED_CHAT_FRAME:AddMessage("MT: "..msg, 0.0, 0.9, 0.9)
 end
@@ -86,8 +76,6 @@ function Mailable_Event(frame, event, arg)
 	end
 end
 
-Max_Scan_line = 5
-
 function Mailable_Finditems( frame, trade )
 	-- Scan invendory for mailable items
 	-- "Soulbound" or "Quest Item" in their 2nd line in tooltip will be excluded
@@ -139,72 +127,41 @@ function Mailable_Finditems( frame, trade )
 	
 	numButton = 0
 	for container = 0, NUM_BAG_SLOTS, 1 do
-		for slot = 1, GetContainerNumSlots(container), 1 do
-			--DEFAULT_CHAT_FRAME:AddMessage("Checking "..container..", "..slot)
-			MailTo_MailableHiddenTooltip:ClearLines()
-			MailTo_MailableHiddenTooltip:SetBagItem(container, slot)
-			itemExist = false
-			skipThisItem = false
-			for line = 1, Max_Scan_line, 1 do
-				local theLineObj = getglobal("MailTo_MailableHiddenTooltipTextLeft"..line)
-				if theLineObj then
-					local theLineTxt = theLineObj:GetText()
-					if theLineTxt then
-						-- if line == 1 then
-							-- DEFAULT_CHAT_FRAME:AddMessage(theLineTxt)
-						-- end
-						itemExist = true
-						if theLineTxt == ITEM_SOULBOUND then 
-							skipThisItem = true 
-							-- DEFAULT_CHAT_FRAME:AddMessage("is soulbound")
-						elseif theLineTxt == ITEM_BIND_QUEST then 
-							skipThisItem = true 
-							-- DEFAULT_CHAT_FRAME:AddMessage("is quest item")
-						-- any BoP in bag cannot be not soulbound already
-						-- therefore we don't check for ITEM_BIND_ON_PICKUP here
-						elseif theLineTxt == ITEM_CONJURED and not trade then 
-							skipThisItem = true 
-							-- DEFAULT_CHAT_FRAME:AddMessage("is conjured")
-						end
-					elseif line == 1 then
-						-- battle pets have own tooltip frame
-						-- therefore test for them explicitly
-						local _texture, _count, _locked, _quality, _readable, _lootable, link, _isFiltered = GetContainerItemInfo(container, slot)
-						if link and link:find("\124Hbattlepet:") then
-							-- DEFAULT_CHAT_FRAME:AddMessage("is battle pet")
-							itemExist = true
+		for slot = 1, C_Container.GetContainerNumSlots(container), 1 do
+			local info = C_Container.GetContainerItemInfo(container, slot)
+			local skipThisItem = false
+			if info and info.iconFileID then
+				local tooltip = C_TooltipInfo.GetBagItem(container, slot)
+				if tooltip then
+					for i in ipairs(tooltip.lines) do
+						for j in ipairs(tooltip.lines[i].args) do
+							local theLineTxt = tooltip.lines[i].args[j].stringVal
+							if theLineTxt == ITEM_SOULBOUND then
+								skipThisItem = true
+								-- print("MT: "..info.hyperlink.." is soulbound")
+								-- DEFAULT_CHAT_FRAME:AddMessage("is soulbound")
+							elseif theLineTxt == ITEM_BIND_QUEST then
+								skipThisItem = true
+								-- print("MT: "..info.hyperlink.." is a quest item")
+								-- DEFAULT_CHAT_FRAME:AddMessage("is quest item")
+							-- any BoP in bag cannot be not soulbound already
+							-- therefore we don't check for ITEM_BIND_ON_PICKUP here
+							elseif theLineTxt == ITEM_CONJURED and not trade then
+								skipThisItem = true
+								-- print("MT: "..info.hyperlink.." is conjured")
+								-- DEFAULT_CHAT_FRAME:AddMessage("is conjured")
+							end
 						end
 					end
 				end
-			end
-		
-			-- local the1stLineObj = getglobal("MailTo_MailableHiddenTooltipTextLeft1")
-			-- local the1stLineTxt = the1stLineObj:GetText()
-			-- local the2ndLineObj = getglobal("MailTo_MailableHiddenTooltipTextLeft2")
-			-- local the2ndLineTxt = the2ndLineObj:GetText()
-			-- local the3rdLineObj = getglobal("MailTo_MailableHiddenTooltipTextLeft3")
-			-- local the3rdLineTxt
-			-- if the3rdLineObj then the3rdLineTxt = the3rdLineObj:GetText() end
-			-- if the1stLineTxt then
-			-- 	if not the2ndLineTxt then the2ndLineTxt = "" end
-			-- 	if not the3rdLineTxt then the3rdLineTxt = "" end
-			-- 	if 	(the2ndLineTxt ~= ITEM_SOULBOUND)  
-			-- 		and (the2ndLineTxt ~= ITEM_BIND_QUEST)  
-			-- 		and (the2ndLineTxt ~= ITEM_BIND_ON_PICKUP)  
-			-- 		and (the2ndLineTxt ~= ITEM_HEROIC and the2ndLineTxt ~= ITEM_HEROIC_EPIC and 
-			-- 			the3rdLineTxt ~= ITEM_SOULBOUND and the3rdLineTxt ~= ITEM_BIND_ON_PICKUP)
-			-- 		and ((the2ndLineTxt ~= ITEM_CONJURED) or trade) 
-			-- 	then
-				if itemExist and not skipThisItem then
-					local sName, sLink, iRarity, iLevel, iMinLevel, sType, sSubType, iStackCount = GetItemInfo(GetContainerItemLink(container, slot))
+
+				if not skipThisItem then
 					-- mailto_print( gsub(sLink, "\124", "\124\124") )
-					if not (Mailable_FilterList[ sType ] or Mailable_FilterList[ sLink ]) then	
+					if not (Mailable_FilterList[ sType ] or Mailable_FilterList[ sLink ]) then
 						numButton = numButton + 1
 						-- DEFAULT_CHAT_FRAME:AddMessage("numButton = "..numButton)
-						if 	((Mailable_CurrentPage - 1) * Mailable_GridSize * Mailable_GridSize < numButton) and  
-							(numButton <= Mailable_CurrentPage * Mailable_GridSize * Mailable_GridSize) then
-							
-							local texture, itemCount, locked, quality, readable = GetContainerItemInfo(container, slot)
+						if ((Mailable_CurrentPage - 1) * Mailable_GridSize * Mailable_GridSize < numButton) and
+						    (numButton <= Mailable_CurrentPage * Mailable_GridSize * Mailable_GridSize) then
 							local pageButton = numButton - (Mailable_CurrentPage - 1) * Mailable_GridSize * Mailable_GridSize
 							_,_,row = string.find(tostring((pageButton + Mailable_GridSize - 1) / Mailable_GridSize), "^(%d+)")
 							col = tostring((pageButton + Mailable_GridSize - 1) % Mailable_GridSize + 1)
@@ -212,28 +169,29 @@ function Mailable_Finditems( frame, trade )
 							-- DEFAULT_CHAT_FRAME:AddMessage("Button "..row..", "..col)
 							
 							b = getglobal(frame.."GridRow"..row.."Item"..col)
-							-- b:SetNormalTexture( texture )
-							SetItemButtonTexture(b, texture)
-							SetItemButtonDesaturated(b, locked)
-		
+							SetItemButtonTexture(b, info.iconFileID)
+							SetItemButtonDesaturated(b, info.isLocked)
+
 							s = getglobal(frame.."GridRow"..row.."Item"..col.."CountString")
-							if itemCount > 1 then
-								s:SetText( tostring(itemCount) )
-								b:SetAttribute("itemCount", itemCount)
+							if info.stackCount > 1 then
+								s:SetText( tostring(info.stackCount) )
+								b:SetAttribute("itemCount", info.stackCount)
 							else
 								s:SetText( "" )
 								b:SetAttribute("itemCount", nil)
 							end
-							
+
 							b:SetAttribute("container", container)
 							b:SetAttribute("slot", slot)
 						end
 					end
 				end
-			-- end
+
+
+
+			end
 		end
 	end
-	
 --[[
 	--DEFAULT_CHAT_FRAME:AddMessage("Negative ID")
 	--- support of keyring (and other bags that has negative id)
@@ -406,7 +364,7 @@ function Mailable_OnEnter(b)
 		--DEFAULT_CHAT_FRAME:AddMessage("Hover Button "..container..", "..slot)
 		MailTo_MailableTooltip:SetOwner(b, ANCHOR_NONE)
 		if container < 0 then
-			local ItemLink = GetContainerItemLink(container, slot)
+			local ItemLink = C_Container.GetContainerItemLink(container, slot)
 			MailTo_MailableTooltip:SetHyperlink(ItemLink)
 		else
 			MailTo_MailableTooltip:SetBagItem(container, slot)
@@ -424,7 +382,7 @@ function Mailable_OnClick(b, click, down)
 	if container and slot then
 		--DEFAULT_CHAT_FRAME:AddMessage(click.." "..container..", "..slot)
 		if CursorHasItem() then 
-			PickupContainerItem(container, slot)
+			C_Container.PickupContainerItem(container, slot)
 			ClearCursor() 
 			return
 		end
@@ -432,9 +390,9 @@ function Mailable_OnClick(b, click, down)
 		if IsShiftKeyDown() then
 			--DEFAULT_CHAT_FRAME:AddMessage("IsShiftKeyDown() = true")
 			if click == "RightButton" then
-				PickupContainerItem(container, slot)
+				C_Container.PickupContainerItem(container, slot)
 			else
-				local ItemLink = GetContainerItemLink(container, slot)
+				local ItemLink = C_Container.GetContainerItemLink(container, slot)
 				
 				-- if ChatFrameEditBox:IsShown() then
 				-- 	ChatEdit_InsertLink(ItemLink)
@@ -442,12 +400,12 @@ function Mailable_OnClick(b, click, down)
 				if ( activeWindow ) then 
 					activeWindow:Insert(ItemLink); 
 				else
-					local texture, itemCount, locked = GetContainerItemInfo(container, slot)
-					if ( not locked ) then
+					local info = C_Container.GetContainerItemInfo(container, slot)
+					if ( info and not info.isLocked ) then
 						self.SplitStack = function(button, split)
 							SplitContainerItem(button:GetAttribute("container"), button:GetAttribute("slot"), split)
 						end
-						OpenStackSplitFrame(itemCount, self, "BOTTOMRIGHT", "TOPRIGHT")
+						OpenStackSplitFrame(item.stackCount, self, "BOTTOMRIGHT", "TOPRIGHT")
 					end
 				end
 			end
@@ -458,7 +416,7 @@ function Mailable_OnClick(b, click, down)
 				
 				if Mailable_OpenFrame == "Mail" then
 					MailFrameTab_OnClick(nil, 2)
-					PickupContainerItem(container, slot)
+					C_Container.PickupContainerItem(container, slot)
 					ClickSendMailItemButton()
 					if click == "RightButton" and not MailTo_Option.noshift then
 						SendMailMailButton:Click()
@@ -467,26 +425,26 @@ function Mailable_OnClick(b, click, down)
 					if click == "RightButton" and not MailTo_Option.noshift then
 						TradeFrameTradeButton:Click()
 					else
-						PickupContainerItem(container, slot)
+						C_Container.PickupContainerItem(container, slot)
 						local slot = TradeFrame_GetAvailableSlot()
 						if slot then ClickTradeButton(slot) end
 					end
 				elseif Mailable_OpenFrame == "Auction" then
 					if click == "RightButton" and not MailTo_Option.noshift then
 						if AuctionatorTabs_Selling ~= nil then
-							-- support for Auctionator addon
-							AuctionatorTabs_Selling:OnClick()
-							PickupContainerItem(container,slot)
+							-- support for Auctionatr addon
+							AuctionatorTabs_Selling:Click()
+							C_Container.PickupContainerItem(container,slot)
 							AuctionHouseFrame.AuctionatorSellingFrame.SaleItemFrame.Icon:OnReceiveDrag()
 						else
 							-- use standard Sell tab
 							AuctionHouseFrame.SellTab:OnClick()
-							PickupContainerItem(container,slot)
+							C_Container.PickupContainerItem(container,slot)
 							AuctionHouseFrame.ItemSellFrame:OnOverlayClick()
 						end
 					else
 						AuctionHouseFrame.BuyTab:OnClick()
-						AuctionSearch(GetContainerItemLink(container, slot))
+						AuctionSearch(C_Container.GetContainerItemLink(container, slot))
 					end
 				end
 			end
@@ -496,7 +454,7 @@ function Mailable_OnClick(b, click, down)
 		if CursorHasItem() then 
 			container, slot = FindEmptySlot()
 			if container and slot then
-				PickupContainerItem(container, slot)
+				C_Container.PickupContainerItem(container, slot)
 				ClearCursor() 
 				return
 			else
@@ -508,10 +466,10 @@ end
 
 function FindEmptySlot()
 	for container = 0, 4, 1 do
-		for slot = 1, GetContainerNumSlots(container), 1 do
+		for slot = 1, C_Container.GetContainerNumSlots(container), 1 do
 			--DEFAULT_CHAT_FRAME:AddMessage("Checking "..container..", "..slot)
-			local texture, itemCount, locked, quality, readable = GetContainerItemInfo(container, slot)
-			if not itemCount then
+			local info = C_Container.GetContainerItemInfo(container, slot)
+			if info and not info.iconFileID then
 				return container, slot
 			end
 		end
