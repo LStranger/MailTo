@@ -126,7 +126,7 @@ function Mailable_Finditems( frame, trade )
 	end
 	
 	numButton = 0
-	for container = 0, NUM_BAG_SLOTS, 1 do
+	for container = 0, NUM_TOTAL_EQUIPPED_BAG_SLOTS, 1 do
 		for slot = 1, C_Container.GetContainerNumSlots(container), 1 do
 			local info = C_Container.GetContainerItemInfo(container, slot)
 			local skipThisItem = false
