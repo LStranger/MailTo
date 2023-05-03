@@ -23,7 +23,7 @@ function Mailable_Event(frame, event, arg)
 		--CheckInbox()
 		Mailable_OpenFrame = "Mail"
 		Mailable_CurrentPage = 1
-		Mailable_Finditems( "MailTo_MailableFrame", false )
+		Mailable_Finditems( "MailTo_MailableFrame", false, true )
 		frame:RegisterEvent("BAG_UPDATE")
 		Mailable_UpdateHint("MailTo_MailableFrame")
 		ShowUIPanel(MailTo_MailableFrame)
@@ -34,14 +34,14 @@ function Mailable_Event(frame, event, arg)
 	elseif event=="TRADE_SHOW" and not MailTo_Option.notrade then
 		Mailable_OpenFrame = "Trade"
 		Mailable_CurrentPage = 1
-		Mailable_Finditems( "MailTo_TradableFrame", true )
+		Mailable_Finditems( "MailTo_TradableFrame", true, false )
 		frame:RegisterEvent("BAG_UPDATE")
 		Mailable_UpdateHint("MailTo_TradableFrame")
 		ShowUIPanel(MailTo_TradableFrame)
 	elseif event=="AUCTION_HOUSE_SHOW" and not MailTo_Option.noauction then
 		Mailable_OpenFrame = "Auction"
 		Mailable_CurrentPage = 1
-		Mailable_Finditems( "MailTo_AuctionableFrame", false )
+		Mailable_Finditems( "MailTo_AuctionableFrame", false, false )
 		frame:RegisterEvent("BAG_UPDATE")
 		Mailable_UpdateHint("MailTo_AuctionableFrame")
 		ShowUIPanel(MailTo_AuctionableFrame)
@@ -67,16 +67,16 @@ function Mailable_Event(frame, event, arg)
 	elseif event=="ITEM_LOCK_CHANGED" then
 		--DEFAULT_CHAT_FRAME:AddMessage("ITEM_LOCK_CHANGED")
 		if Mailable_OpenFrame == "Mail" then
-			Mailable_Finditems( "MailTo_MailableFrame", false )
+			Mailable_Finditems( "MailTo_MailableFrame", false, true )
 		elseif Mailable_OpenFrame == "Trade" then
-			Mailable_Finditems( "MailTo_TradableFrame", true )
+			Mailable_Finditems( "MailTo_TradableFrame", true, false )
 		elseif Mailable_OpenFrame == "Auction" then
-			Mailable_Finditems( "MailTo_AuctionableFrame", true )
+			Mailable_Finditems( "MailTo_AuctionableFrame", false, false )
 		end
 	end
 end
 
-function Mailable_Finditems( frame, trade )
+function Mailable_Finditems( frame, trade, mail )
 	-- Scan invendory for mailable items
 	-- "Soulbound" or "Quest Item" in their 2nd line in tooltip will be excluded
 	-- if trade is false, "Conjured Items" will also be excluded
@@ -133,14 +133,16 @@ function Mailable_Finditems( frame, trade )
 			if info and info.iconFileID then
 				local tooltip = C_TooltipInfo.GetBagItem(container, slot)
 				if tooltip then
-					for i in ipairs(tooltip.lines) do
-						for j in ipairs(tooltip.lines[i].args) do
-							local theLineTxt = tooltip.lines[i].args[j].stringVal
-							if theLineTxt == ITEM_SOULBOUND then
+					for i,v in ipairs(tooltip.lines) do
+							local theLineTxt = v.leftText
+							local bound = v.bonding
+							if bound == 3 then -- BoP
 								skipThisItem = true
 								-- print("MT: "..info.hyperlink.." is soulbound")
 								-- DEFAULT_CHAT_FRAME:AddMessage("is soulbound")
-							elseif theLineTxt == ITEM_BIND_QUEST then
+							elseif bound == 2 and not mail then -- BoA
+								skipThisItem = true
+							elseif bound == 0 then -- Quest
 								skipThisItem = true
 								-- print("MT: "..info.hyperlink.." is a quest item")
 								-- DEFAULT_CHAT_FRAME:AddMessage("is quest item")
@@ -151,7 +153,6 @@ function Mailable_Finditems( frame, trade )
 								-- print("MT: "..info.hyperlink.." is conjured")
 								-- DEFAULT_CHAT_FRAME:AddMessage("is conjured")
 							end
-						end
 					end
 				end
 

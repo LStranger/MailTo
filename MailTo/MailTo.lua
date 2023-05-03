@@ -1016,11 +1016,11 @@ function MailTo_command(msg)
 		end
 		
 		if Mailable_OpenFrame == "Mail" then
-			Mailable_Finditems( "MailTo_MailableFrame", false )
+			Mailable_Finditems( "MailTo_MailableFrame", false, true )
 		elseif Mailable_OpenFrame == "Trade" then
-			Mailable_Finditems( "MailTo_TradableFrame", true )
+			Mailable_Finditems( "MailTo_TradableFrame", true, false )
 		elseif Mailable_OpenFrame == "Auction" then
-			Mailable_Finditems( "MailTo_AuctionableFrame", true )
+			Mailable_Finditems( "MailTo_AuctionableFrame", true, false )
 		end
 		return
 	end
@@ -1036,11 +1036,11 @@ function MailTo_command(msg)
 		Mailable_FilterList = {}
 		
 		if Mailable_OpenFrame == "Mail" then
-			Mailable_Finditems( "MailTo_MailableFrame", false )
+			Mailable_Finditems( "MailTo_MailableFrame", false, true )
 		elseif Mailable_OpenFrame == "Trade" then
-			Mailable_Finditems( "MailTo_TradableFrame", true )
+			Mailable_Finditems( "MailTo_TradableFrame", true, false )
 		elseif Mailable_OpenFrame == "Auction" then
-			Mailable_Finditems( "MailTo_AuctionableFrame", true )
+			Mailable_Finditems( "MailTo_AuctionableFrame", true, false )
 		end
 		return
 	end
