@@ -301,11 +301,11 @@ function Mailable_Update(frame)
 		--DEFAULT_CHAT_FRAME:AddMessage("name = "..MailTo_MailableFrame:GetName())
 		
 		if Mailable_OpenFrame == "Mail" then
-			Mailable_Finditems( "MailTo_MailableFrame", false )
+			Mailable_Finditems( "MailTo_MailableFrame", false, true )
 		elseif Mailable_OpenFrame == "Trade" then
-			Mailable_Finditems( "MailTo_TradableFrame", true )
+			Mailable_Finditems( "MailTo_TradableFrame", true, false )
 		elseif Mailable_OpenFrame == "Auction" then
-			Mailable_Finditems( "MailTo_AuctionableFrame", true )
+			Mailable_Finditems( "MailTo_AuctionableFrame", false, false )
 		end
 	end
 end

@@ -1,3 +1,7 @@
+Release v.1.8.15:
+    - Fix Mailable_Finditems call arguments.
+    - Update TOC to WoW 11.0.2.
+
 Release v.1.8.14:
     - Update with 10.1.0 C_Container API.
     - Update TOC to WoW 10.1.0.

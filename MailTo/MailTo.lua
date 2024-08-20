@@ -1020,7 +1020,7 @@ function MailTo_command(msg)
 		elseif Mailable_OpenFrame == "Trade" then
 			Mailable_Finditems( "MailTo_TradableFrame", true, false )
 		elseif Mailable_OpenFrame == "Auction" then
-			Mailable_Finditems( "MailTo_AuctionableFrame", true, false )
+			Mailable_Finditems( "MailTo_AuctionableFrame", false, false )
 		end
 		return
 	end
@@ -1040,7 +1040,7 @@ function MailTo_command(msg)
 		elseif Mailable_OpenFrame == "Trade" then
 			Mailable_Finditems( "MailTo_TradableFrame", true, false )
 		elseif Mailable_OpenFrame == "Auction" then
-			Mailable_Finditems( "MailTo_AuctionableFrame", true, false )
+			Mailable_Finditems( "MailTo_AuctionableFrame", false, false )
 		end
 		return
 	end
