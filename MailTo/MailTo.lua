@@ -332,7 +332,7 @@ function MailTo_Init()
     MailTo_ReturnInboxItem_Save = ReturnInboxItem
     ReturnInboxItem = MailTo_ReturnInboxItem
     -- hook Chat OnCLick
-    hooksecurefunc("ChatFrame_OnHyperlinkShow", MailTo_ChatOnClick)
+    -- FIXME!!! hooksecurefunc("ChatFrame_OnHyperlinkShow", MailTo_ChatOnClick)
     -- MailTo_ChatOnClick_Save = ChatFrame_OnHyperlinkShow
     -- ChatFrame_OnHyperlinkShow = MailTo_ChatOnClick
     -- hook MailMod
@@ -715,7 +715,7 @@ function AuctionSearch(link)
 end
 
 -- Handle Chat OnClick events
-function MailTo_ChatOnClick(item,link,button)
+function MailTo_ChatOnClick(item,link,text,button)
 	--DEFAULT_CHAT_FRAME:AddMessage("MailTo_ChatOnClick")
     if button=="RightButton" and not IsControlKeyDown() and not IsAltKeyDown() then
       if AuctionSearch(link) then return end
