@@ -1,3 +1,7 @@
+Release v.1.8.17:
+    - Fix Warbound items being shown on Auction or Trade.
+    - Update TOC to WoW 12.0.1.
+
 Release v.1.8.16:
     - Function ChatFrame_OnHyperlinkShow() is not available thus disable relevant feature for now.
     - Update TOC to WoW 12.0.0.

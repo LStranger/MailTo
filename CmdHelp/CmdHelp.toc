@@ -1,4 +1,4 @@
-## Interface: 110002, 120000
+## Interface: 110002, 120000, 120001
 ## Title: CmdHelp
 ## Author: Vincent of Blackhand (D.A.Down)
 ## Notes: Generic command help system.

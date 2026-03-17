@@ -1,6 +1,6 @@
-## Interface: 110002, 120000
+## Interface: 110002, 120000, 120001
 ## Title: MailTo Next
-## Version 1.8.16
+## Version 1.8.17
 ## Author: Jyin, (original by Vincent)
 ## Notes: Mail management and tracking.
 ## Notes-deDE: Mail Liste für das Empf\195\164nger Feld

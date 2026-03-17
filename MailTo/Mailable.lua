@@ -136,11 +136,11 @@ function Mailable_Finditems( frame, trade, mail )
 					for i,v in ipairs(tooltip.lines) do
 							local theLineTxt = v.leftText
 							local bound = v.bonding
-							if bound == 3 then -- BoP
+							if (bound == 3 or bound == 6) then -- Soulbound or BoP
 								skipThisItem = true
 								-- print("MT: "..info.hyperlink.." is soulbound")
 								-- DEFAULT_CHAT_FRAME:AddMessage("is soulbound")
-							elseif bound == 2 and not mail then -- BoA
+							elseif (bound == 1 or bound == 2 or bound == 4 or bound == 5 or bound == 9 or bound == 10) and not mail then -- BoA / Warbound
 								skipThisItem = true
 							elseif bound == 0 then -- Quest
 								skipThisItem = true
@@ -187,9 +187,6 @@ function Mailable_Finditems( frame, trade, mail )
 						end
 					end
 				end
-
-
-
 			end
 		end
 	end
