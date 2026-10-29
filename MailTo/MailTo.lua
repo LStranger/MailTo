@@ -497,6 +497,12 @@ MT_Help = { ['?'] = 'MailTo';
 		  [''] = "Display newly delivered items on this server ",
 		  all = "Display newly delivered items on all servers", };
 	}
+
+-- MoneyFrame taint fix, courtesy of Galehad's MoneyFrameFix
+local function SetTooltipMoney(frame, money)
+    frame:AddLine("  " .. C_CurrencyInfo.GetCoinTextureString(money), 1, 1, 1)
+end
+
 local function tip_money(money)
     if money>0 then
       GameTooltip:AddLine(ENCLOSED_MONEY)

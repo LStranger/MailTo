@@ -1,3 +1,7 @@
+Release v.1.8.18:
+    - Fix call to SetTooltipMoney to fix broken tooltip.
+    - Update TOC to WoW 12.1.5.
+
 Release v.1.8.17:
     - Fix Warbound items being shown on Auction or Trade.
     - Update TOC to WoW 12.0.1.
